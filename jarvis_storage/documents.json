@@ -1,0 +1,12 @@
+[
+  {
+    "id": "doc-1",
+    "title": "JARVIS_System_Architecture.md",
+    "filename": "JARVIS_System_Architecture.md",
+    "format": "md",
+    "content": "# J.A.R.V.I.S Pro Architecture\n\n- Frontend: React 19 + Tailwind Cyber HUD\n- Backend: Express + Child_Process OS Controller\n- Brain: Gemini 3.7 Flash with Tool Calling\n- Protocol: Real-time bi-directional streaming",
+    "createdAt": "2026-08-14T05:21:11.709Z",
+    "sizeBytes": 256,
+    "path": "C:\\Users\\DELL\\Downloads\\j.a.r.v.i.s-voice-assistant\\jarvis_storage\\JARVIS_System_Architecture.md"
+  }
+]

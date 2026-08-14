@@ -1,0 +1,30 @@
+[
+  {
+    "id": "mem-1",
+    "key": "user_preferred_name",
+    "value": "Sir",
+    "category": "preference",
+    "updatedAt": "2026-08-14T05:21:11.690Z"
+  },
+  {
+    "id": "mem-2",
+    "key": "jarvis_persona",
+    "value": "Polite, razor-sharp, anticipatory, futuristic AI butler",
+    "category": "system",
+    "updatedAt": "2026-08-14T05:21:11.701Z"
+  },
+  {
+    "id": "mem-3",
+    "key": "default_workspace",
+    "value": "Local System & Cloud Runtime",
+    "category": "fact",
+    "updatedAt": "2026-08-14T05:21:11.701Z"
+  },
+  {
+    "id": "mem-4",
+    "key": "active_projects",
+    "value": "Project J.A.R.V.I.S Pro Computer Control suite",
+    "category": "session",
+    "updatedAt": "2026-08-14T05:21:11.701Z"
+  }
+]
