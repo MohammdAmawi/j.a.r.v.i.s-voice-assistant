@@ -13,6 +13,7 @@ import { MemoryHUD } from './components/MemoryHUD';
 import { WebSearchHUD } from './components/WebSearchHUD';
 import { ArchitectureDocsHUD } from './components/ArchitectureDocsHUD';
 import { TestRunnerHUD } from './components/TestRunnerHUD';
+import { OpenJarvisHUD } from './components/OpenJarvisHUD';
 
 import { AssistantState, CommandLog, SystemTelemetry, GeneratedDocument, MemoryEntry, SpotifyState } from './types';
 import { speechEngine } from './audio/speechEngine';
@@ -500,6 +501,10 @@ export default function App() {
                 speechEngine.setWakeWord(w);
               }}
             />
+          )}
+
+          {activeTab === 'openjarvis' && (
+            <OpenJarvisHUD />
           )}
 
           {activeTab === 'os' && (

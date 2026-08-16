@@ -75,3 +75,15 @@ export interface JarvisActionResponse {
   actionPayload?: any;
   logs?: string[];
 }
+
+export interface ElectronAPI {
+  askJarvis: (text: string) => Promise<string>;
+}
+
+declare global {
+  interface Window {
+    electronAPI?: ElectronAPI;
+    jarvisAPI?: any;
+  }
+}
+

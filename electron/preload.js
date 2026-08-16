@@ -14,6 +14,14 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
+/**
+ * OpenJarvis Electron API Gateway
+ * Exposes safe, isolated IPC invocations for local AI execution.
+ */
+contextBridge.exposeInMainWorld('electronAPI', {
+  askJarvis: (text) => ipcRenderer.invoke('ask-jarvis', text),
+});
+
 contextBridge.exposeInMainWorld('jarvisAPI', {
   // === OS & AUTOMATION BRIDGES ===
   executeCommand: (command) => ipcRenderer.invoke('os:execute-command', command),
@@ -74,4 +82,7 @@ contextBridge.exposeInMainWorld('jarvisAPI', {
   minimizeWindow: () => ipcRenderer.send('window:minimize'),
   maximizeWindow: () => ipcRenderer.send('window:maximize'),
   closeWindow: () => ipcRenderer.send('window:close'),
+
+
 });
+

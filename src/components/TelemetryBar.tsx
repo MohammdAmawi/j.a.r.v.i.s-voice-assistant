@@ -1,8 +1,7 @@
-import React from 'react';
-import { Wifi, Cpu, HardDrive, Network, Terminal, Folder, Music, Brain, Globe, FileCode2, FlaskConical, MessageSquare } from 'lucide-react';
+import { Wifi, Cpu, HardDrive, Network, Terminal, Folder, Music, Brain, Globe, FileCode2, FlaskConical, MessageSquare, Bot } from 'lucide-react';
 import { SystemTelemetry } from '../types';
 
-export type ActiveTab = 'chat' | 'os' | 'files' | 'spotify' | 'memory' | 'search' | 'architecture' | 'tests';
+export type ActiveTab = 'chat' | 'openjarvis' | 'os' | 'files' | 'spotify' | 'memory' | 'search' | 'architecture' | 'tests';
 
 interface TelemetryBarProps {
   telemetry: SystemTelemetry;
@@ -47,6 +46,7 @@ export const TelemetryBar: React.FC<TelemetryBarProps> = ({
         <div className="flex items-center flex-wrap justify-center gap-1">
           {[
             { id: 'chat', label: 'VOICE AI', icon: MessageSquare },
+            { id: 'openjarvis', label: 'OPENJARVIS', icon: Bot },
             { id: 'os', label: 'COMPUTER CONTROL', icon: Terminal },
             { id: 'files', label: 'FILES & PDF', icon: Folder },
             { id: 'spotify', label: 'SPOTIFY', icon: Music },
