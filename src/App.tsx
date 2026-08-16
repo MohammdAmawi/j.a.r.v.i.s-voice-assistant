@@ -14,6 +14,7 @@ import { WebSearchHUD } from './components/WebSearchHUD';
 import { ArchitectureDocsHUD } from './components/ArchitectureDocsHUD';
 import { TestRunnerHUD } from './components/TestRunnerHUD';
 import { OpenJarvisHUD } from './components/OpenJarvisHUD';
+import { AudioHUD } from './components/AudioHUD';
 
 import { AssistantState, CommandLog, SystemTelemetry, GeneratedDocument, MemoryEntry, SpotifyState } from './types';
 import { speechEngine } from './audio/speechEngine';
@@ -501,6 +502,10 @@ export default function App() {
                 speechEngine.setWakeWord(w);
               }}
             />
+          )}
+
+          {activeTab === 'audio' && (
+            <AudioHUD />
           )}
 
           {activeTab === 'openjarvis' && (

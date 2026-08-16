@@ -16,10 +16,17 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 /**
  * OpenJarvis Electron API Gateway
- * Exposes safe, isolated IPC invocations for local AI execution.
+ * Exposes safe, isolated IPC invocations for local AI execution and native audio processing.
  */
 contextBridge.exposeInMainWorld('electronAPI', {
+  // Text Chat Bridge
   askJarvis: (text) => ipcRenderer.invoke('ask-jarvis', text),
+
+  // Native Audio & Voice Bridges (faster-whisper STT & OpenJarvis Neural TTS)
+  listenSTT: (options) => ipcRenderer.invoke('jarvis:stt', options),
+  speakTTS: (text, options) => ipcRenderer.invoke('jarvis:tts', text, options),
+  startVoiceSession: (options) => ipcRenderer.invoke('jarvis:voice-session', options),
+  playJarvisAudio: (audioDataUri) => ipcRenderer.invoke('jarvis:play-audio', audioDataUri),
 });
 
 contextBridge.exposeInMainWorld('jarvisAPI', {

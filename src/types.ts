@@ -76,8 +76,44 @@ export interface JarvisActionResponse {
   logs?: string[];
 }
 
+export interface STTResult {
+  text: string;
+  durationMs?: number;
+  engine?: string;
+}
+
+export interface TTSResult {
+  success: boolean;
+  text: string;
+  audioDataUri?: string | null;
+  engine?: string;
+  message?: string;
+}
+
+export interface VoiceSessionResult {
+  transcript: string;
+  response: string;
+  audioDataUri?: string | null;
+  durationMs: number;
+  engine?: string;
+  status: 'success' | 'empty_input' | 'error';
+}
+
+export interface AudioTelemetry {
+  sttEngine: string;
+  ttsEngine: string;
+  sampleRate: number;
+  latencyMs: number;
+  isHardwareConnected: boolean;
+  status: string;
+}
+
 export interface ElectronAPI {
   askJarvis: (text: string) => Promise<string>;
+  listenSTT?: (options?: any) => Promise<STTResult>;
+  speakTTS?: (text: string, options?: any) => Promise<TTSResult>;
+  startVoiceSession?: (options?: any) => Promise<VoiceSessionResult>;
+  playJarvisAudio?: (audioDataUri: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 declare global {
@@ -86,4 +122,5 @@ declare global {
     jarvisAPI?: any;
   }
 }
+
 
