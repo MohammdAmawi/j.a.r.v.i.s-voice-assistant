@@ -1,5 +1,15 @@
 [
   {
+    "id": "doc-1786944095888",
+    "title": "Jarvis_Executive_Report.txt",
+    "filename": "Jarvis_Executive_Report.txt",
+    "format": "txt",
+    "content": "# J.A.R.V.I.S Intelligence Briefing\n\nDate: 8/17/2026\nStatus: All core microservices active.\n\n## Summary\n- Pro-Tier OS Control initiated.\n- Continuous voice recognition calibrated.\n- Direct local filesystem storage active.",
+    "createdAt": "2026-08-17T05:21:35.888Z",
+    "sizeBytes": 221,
+    "path": "C:\\Users\\DELL\\Downloads\\j.a.r.v.i.s-voice-assistant\\j.a.r.v.i.s-voice-assistant\\jarvis_storage\\Jarvis_Executive_Report.txt"
+  },
+  {
     "id": "doc-1",
     "title": "JARVIS_System_Architecture.md",
     "filename": "JARVIS_System_Architecture.md",
