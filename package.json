@@ -2,9 +2,12 @@
   "name": "react-example",
   "private": true,
   "version": "0.0.0",
+  "main": "electron/main.cjs",
   "type": "module",
   "scripts": {
     "dev": "tsx server.ts",
+    "electron:start": "wait-on tcp:3000 && electron .",
+    "app:dev": "concurrently \"npm run dev\" \"npm run electron:start\"",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
     "start": "node dist/server.cjs",
     "clean": "rm -rf dist server.js",
@@ -34,12 +37,15 @@
     "@types/node": "^22.14.0",
     "@vitest/coverage-v8": "^4.1.10",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^10.0.5",
+    "electron": "^43.4.0",
     "esbuild": "^0.25.0",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.23.12",
     "typescript": "~5.8.2",
     "vite": "^6.2.3",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.10",
+    "wait-on": "^9.1.0"
   }
 }

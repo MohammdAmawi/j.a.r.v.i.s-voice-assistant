@@ -9,7 +9,7 @@
  * - Protects against command injection and shell syntax errors via defensive string sanitization.
  */
 
-const { ipcMain, app } = require('electron');
+const { ipcMain, app, BrowserWindow } = require('electron');
 const { exec } = require('child_process');
 const path = require('path');
 const fs = require('fs');
@@ -17,6 +17,59 @@ const os = require('os');
 
 // Target directory where OpenJarvis is installed locally
 const OPENJARVIS_PATH = 'C:\\Users\\DELL\\AppData\\Local\\OpenJarvis\\src';
+
+// Vite dev server URL
+const VITE_DEV_SERVER_URL = 'http://localhost:3000';
+
+let mainWindow = null;
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1440,
+    height: 900,
+    minWidth: 900,
+    minHeight: 600,
+    title: 'J.A.R.V.I.S',
+    backgroundColor: '#060b13',
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: false,
+    },
+  });
+
+  mainWindow.loadURL(VITE_DEV_SERVER_URL);
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
+
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+
+  // Window control IPC handlers
+  ipcMain.on('window:minimize', () => mainWindow?.minimize());
+  ipcMain.on('window:maximize', () => {
+    if (mainWindow?.isMaximized()) mainWindow.unmaximize();
+    else mainWindow?.maximize();
+  });
+  ipcMain.on('window:close', () => mainWindow?.close());
+}
+
+app.whenReady().then(() => {
+  createWindow();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on('window-all-closed', () => {
+  app.quit();
+});
 
 /**
  * Escapes characters safely for Windows CLI execution.
