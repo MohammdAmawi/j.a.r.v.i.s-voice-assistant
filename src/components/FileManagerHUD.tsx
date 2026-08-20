@@ -37,9 +37,9 @@ export const FileManagerHUD: React.FC<FileManagerHUDProps> = ({
         format,
       });
       soundFx.playConfirmSound();
-      setIsGenerating(false);
     } catch (err) {
       soundFx.playErrorAlert();
+    } finally {
       setIsGenerating(false);
     }
   };

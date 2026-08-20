@@ -18,6 +18,7 @@
  *  ✔ sanitizePromptForCLI — injection vectors: quotes, backslashes, null/non-string
  */
 
+import { createRequire } from 'node:module';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import path from 'path';
 import os from 'os';

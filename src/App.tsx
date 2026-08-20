@@ -80,8 +80,14 @@ export default function App() {
     repeat: true,
   });
 
-  // Track speech processing lock
+  // Track speech processing lock and state refs for stale closure prevention
   const isProcessingRef = useRef(false);
+  const assistantStateRef = useRef<AssistantState>('idle');
+
+  // Keep assistantStateRef synchronized
+  useEffect(() => {
+    assistantStateRef.current = assistantState;
+  }, [assistantState]);
 
   // Initialize Speech Engine & Fetch Subsystems
   useEffect(() => {
@@ -148,9 +154,12 @@ export default function App() {
 
     const unsubState = speechEngine.onStateChange((listening) => {
       setIsListening(listening);
-      if (listening && assistantState === 'idle') {
+      const current = assistantStateRef.current;
+      if (listening && current === 'idle') {
+        assistantStateRef.current = 'listening';
         setAssistantState('listening');
-      } else if (!listening && assistantState === 'listening') {
+      } else if (!listening && current === 'listening') {
+        assistantStateRef.current = 'idle';
         setAssistantState('idle');
       }
     });

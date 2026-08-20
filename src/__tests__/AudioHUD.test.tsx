@@ -50,11 +50,11 @@ import {
   stopAudioPlayback,
 } from '../services/openJarvisAudioService';
 
-const mockCaptureSpeechSTT   = captureSpeechSTT   as ReturnType<typeof vi.fn>;
+const mockCaptureSpeechSTT = captureSpeechSTT as ReturnType<typeof vi.fn>;
 const mockSynthesizeSpeechTTS = synthesizeSpeechTTS as ReturnType<typeof vi.fn>;
-const mockRunFullVoiceSession  = runFullVoiceSession as ReturnType<typeof vi.fn>;
-const mockPlayAudioStream      = playAudioStream     as ReturnType<typeof vi.fn>;
-const mockStopAudioPlayback    = stopAudioPlayback   as ReturnType<typeof vi.fn>;
+const mockRunFullVoiceSession = runFullVoiceSession as ReturnType<typeof vi.fn>;
+const mockPlayAudioStream = playAudioStream as ReturnType<typeof vi.fn>;
+const mockStopAudioPlayback = stopAudioPlayback as ReturnType<typeof vi.fn>;
 
 // ──────────────────────────────────────────────────────────────────────────────
 // Helper
@@ -123,7 +123,7 @@ describe('AudioHUD — initial render', () => {
 describe('AudioHUD — voice state: IDLE → LISTENING', () => {
   it('transitions to LISTENING status on ENGAGE click', async () => {
     // Keep the STT call pending so we can observe the listening state
-    mockCaptureSpeechSTT.mockReturnValue(new Promise(() => {}));
+    mockCaptureSpeechSTT.mockReturnValue(new Promise(() => { }));
     const { user } = renderAudioHUD();
 
     await user.click(screen.getByText('ENGAGE'));
@@ -134,7 +134,7 @@ describe('AudioHUD — voice state: IDLE → LISTENING', () => {
   });
 
   it('shows RECORDING label inside the mic button during listening', async () => {
-    mockCaptureSpeechSTT.mockReturnValue(new Promise(() => {}));
+    mockCaptureSpeechSTT.mockReturnValue(new Promise(() => { }));
     const { user } = renderAudioHUD();
     await user.click(screen.getByText('ENGAGE'));
 
@@ -144,7 +144,7 @@ describe('AudioHUD — voice state: IDLE → LISTENING', () => {
   });
 
   it('ENGAGE button is disabled while in LISTENING state', async () => {
-    mockCaptureSpeechSTT.mockReturnValue(new Promise(() => {}));
+    mockCaptureSpeechSTT.mockReturnValue(new Promise(() => { }));
     const { user } = renderAudioHUD();
     await user.click(screen.getByText('ENGAGE'));
 
@@ -161,7 +161,7 @@ describe('AudioHUD — voice state: LISTENING → PROCESSING', () => {
   it('transitions to PROCESSING after STT returns text', async () => {
     mockCaptureSpeechSTT.mockResolvedValue({ text: 'hello jarvis', durationMs: 200 });
     // Keep the session pending so we can observe processing state
-    mockRunFullVoiceSession.mockReturnValue(new Promise(() => {}));
+    mockRunFullVoiceSession.mockReturnValue(new Promise(() => { }));
     const { user } = renderAudioHUD();
     await user.click(screen.getByText('ENGAGE'));
 
@@ -172,7 +172,7 @@ describe('AudioHUD — voice state: LISTENING → PROCESSING', () => {
 
   it('shows INFERRING label in orb button during processing', async () => {
     mockCaptureSpeechSTT.mockResolvedValue({ text: 'hello jarvis', durationMs: 200 });
-    mockRunFullVoiceSession.mockReturnValue(new Promise(() => {}));
+    mockRunFullVoiceSession.mockReturnValue(new Promise(() => { }));
     const { user } = renderAudioHUD();
     await user.click(screen.getByText('ENGAGE'));
 

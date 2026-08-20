@@ -16,15 +16,28 @@ let currentAudioElement: HTMLAudioElement | null = null;
  * Triggers native faster-whisper microphone recording and transcription.
  */
 export async function captureSpeechSTT(): Promise<STTResult> {
+  console.log('[STT DEBUG] captureSpeechSTT called');
+  console.log('[STT DEBUG] window.electronAPI defined:', typeof window !== 'undefined' && !!window.electronAPI);
+  console.log('[STT DEBUG] listenSTT method available:', typeof window.electronAPI?.listenSTT);
+
   if (typeof window === 'undefined' || !window.electronAPI?.listenSTT) {
+    console.error('[STT ERROR] Guard triggered — Electron runtime not available.');
+    console.error('[STT ERROR] window.electronAPI:', window.electronAPI);
     throw new Error('Native faster-whisper STT requires the Electron desktop runtime with OpenJarvis.');
   }
 
   try {
+    console.log('[STT DEBUG] Invoking electronAPI.listenSTT()...');
+    const invokeStart = Date.now();
     const result = await window.electronAPI.listenSTT();
+    console.log('[STT DEBUG] listenSTT resolved in', Date.now() - invokeStart, 'ms');
+    console.log('[STT DEBUG] Result text:', result.text || '(empty)');
+    console.log('[STT DEBUG] Result durationMs:', result.durationMs);
+    console.log('[STT DEBUG] Result engine:', result.engine);
     return result;
   } catch (error: any) {
-    console.error('[Audio Service] STT failed:', error);
+    console.error('[STT ERROR] IPC invocation failed:', error?.message || error);
+    console.error('[STT ERROR] Full error object:', error);
     throw new Error(error?.message || 'Failed to capture or transcribe audio via faster-whisper.');
   }
 }

@@ -41,17 +41,17 @@ export const ComputerControlHUD: React.FC<ComputerControlHUDProps> = ({
     }
   };
 
-  const handleRunCommand = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!customCmd.trim()) return;
+  const handleRunCommand = async (e?: React.FormEvent | string) => {
+    if (e && typeof e !== 'string') e.preventDefault();
+    const cmd = typeof e === 'string' ? e : customCmd;
+    if (!cmd.trim()) return;
 
     setIsRunning(true);
     soundFx.playScanChirp();
-    setCmdOutput(`$ ${customCmd}\nExecuting via child_process bridge...`);
+    setCmdOutput(`$ ${cmd}\nExecuting via child_process bridge...`);
 
     try {
-      const res = await onExecuteCommand(customCmd.trim());
-      setIsRunning(false);
+      const res = await onExecuteCommand(cmd.trim());
       if (res.success) {
         soundFx.playConfirmSound();
         setCmdOutput(`$ ${res.command}\n${res.output || '(No stdout)'}`);
@@ -60,9 +60,10 @@ export const ComputerControlHUD: React.FC<ComputerControlHUDProps> = ({
         setCmdOutput(`$ ${res.command}\n[ERROR]: ${res.output || res.error || 'Execution failed'}`);
       }
     } catch (err: any) {
-      setIsRunning(false);
       soundFx.playErrorAlert();
       setCmdOutput(`[FATAL]: ${err.message}`);
+    } finally {
+      setIsRunning(false);
     }
   };
 
@@ -178,10 +179,7 @@ export const ComputerControlHUD: React.FC<ComputerControlHUDProps> = ({
               </button>
 
               <button
-                onClick={() => {
-                  setCustomCmd('ls -la && df -h');
-                  handleRunCommand();
-                }}
+                onClick={() => handleRunCommand('ls -la && df -h')}
                 className="w-full p-2.5 rounded bg-black/40 hover:bg-cyan-950/60 border border-cyan-900/40 text-slate-300 flex items-center justify-between transition-all"
               >
                 <span className="flex items-center gap-2">

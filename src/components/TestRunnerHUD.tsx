@@ -27,9 +27,9 @@ export const TestRunnerHUD: React.FC<TestRunnerHUDProps> = ({ onRunTests }) => {
       const data = await onRunTests();
       soundFx.playConfirmSound();
       setTestResults(data);
-      setIsRunning(false);
     } catch (e) {
       soundFx.playErrorAlert();
+    } finally {
       setIsRunning(false);
     }
   };

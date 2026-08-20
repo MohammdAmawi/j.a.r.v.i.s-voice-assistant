@@ -35,9 +35,9 @@ export const MemoryHUD: React.FC<MemoryHUDProps> = ({
       soundFx.playConfirmSound();
       setKey('');
       setValue('');
-      setIsSubmitting(false);
     } catch (e) {
       soundFx.playErrorAlert();
+    } finally {
       setIsSubmitting(false);
     }
   };

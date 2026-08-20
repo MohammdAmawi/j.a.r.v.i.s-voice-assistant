@@ -11,20 +11,21 @@ export const WebSearchHUD: React.FC<WebSearchHUDProps> = ({ onSearch }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [searchResult, setSearchResult] = useState<any>(null);
 
-  const handleSearch = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!query.trim()) return;
+  const handleSearch = async (eOrQuery?: React.FormEvent | string) => {
+    if (eOrQuery && typeof eOrQuery !== 'string') eOrQuery.preventDefault();
+    const searchTerm = typeof eOrQuery === 'string' ? eOrQuery : query;
+    if (!searchTerm.trim()) return;
 
     setIsSearching(true);
     soundFx.playScanChirp();
 
     try {
-      const res = await onSearch(query.trim());
+      const res = await onSearch(searchTerm.trim());
       soundFx.playConfirmSound();
       setSearchResult(res);
-      setIsSearching(false);
     } catch (e: any) {
       soundFx.playErrorAlert();
+    } finally {
       setIsSearching(false);
     }
   };
@@ -81,10 +82,7 @@ export const WebSearchHUD: React.FC<WebSearchHUDProps> = ({ onSearch }) => {
             <button
               key={idx}
               type="button"
-              onClick={() => {
-                setQuery(q);
-                handleSearch();
-              }}
+              onClick={() => handleSearch(q)}
               className="px-2 py-0.5 rounded bg-cyan-950/40 hover:bg-cyan-900/60 border border-cyan-800/40 text-cyan-300 transition-all text-left"
             >
               {q}

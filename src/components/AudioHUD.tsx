@@ -69,6 +69,16 @@ export const AudioHUD: React.FC = () => {
   const [logs, setLogs] = useState<VoiceSessionLog[]>([]);
   const stopAudioRef = useRef<(() => void) | null>(null);
 
+  // Auto-recover from error state after 5 seconds
+  useEffect(() => {
+    if (voiceState !== 'error') return;
+    const timeout = setTimeout(() => {
+      setVoiceState('idle');
+      setErrorMessage(null);
+    }, 5000);
+    return () => clearTimeout(timeout);
+  }, [voiceState]);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -80,15 +90,19 @@ export const AudioHUD: React.FC = () => {
   const handleStartVoiceSession = async () => {
     if (voiceState === 'listening' || voiceState === 'processing') return;
 
+    console.log('[Audio HUD] ENGAGE clicked. Current voiceState:', voiceState);
     setErrorMessage(null);
     setVoiceState('listening');
     soundFx.playScanChirp();
 
     try {
       // Step 1: Capture STT via faster-whisper
+      console.log('[Audio HUD] Step 1: Calling captureSpeechSTT()...');
       const stt = await captureSpeechSTT();
+      console.log('[Audio HUD] Step 1 complete. STT result:', { text: stt.text, durationMs: stt.durationMs, engine: stt.engine });
       
       if (!stt.text || !stt.text.trim()) {
+        console.warn('[Audio HUD] STT returned empty transcript. No speech detected.');
         setVoiceState('idle');
         setErrorMessage('No audible voice detected by microphone. Please try again.');
         soundFx.playErrorAlert();
@@ -99,7 +113,9 @@ export const AudioHUD: React.FC = () => {
       setVoiceState('processing');
 
       // Step 2: Query OpenJarvis & Synthesize Voice
+      console.log('[Audio HUD] Step 2: Calling runFullVoiceSession()...');
       const sessionResult = await runFullVoiceSession();
+      console.log('[Audio HUD] Step 2 complete. Session result:', { transcript: sessionResult.transcript, response: sessionResult.response?.substring(0, 80), durationMs: sessionResult.durationMs, status: sessionResult.status });
       
       setTranscript(sessionResult.transcript || stt.text);
       setResponse(sessionResult.response);
@@ -118,28 +134,32 @@ export const AudioHUD: React.FC = () => {
 
       // Step 3: Play Signature Voice Audio
       if (sessionResult.audioDataUri) {
+        console.log('[Audio HUD] Step 3: Playing synthesized audio response...');
         setVoiceState('speaking');
         setIsPlayingAudio(true);
 
         stopAudioRef.current = playAudioStream(
           sessionResult.audioDataUri,
           () => {
+            console.log('[Audio HUD] Audio playback ended.');
             setIsPlayingAudio(false);
             setVoiceState('idle');
           },
           (err) => {
-            console.warn('Playback error:', err.message);
+            console.error('[Audio HUD] Audio playback error:', err.message);
             setIsPlayingAudio(false);
             setVoiceState('idle');
           }
         );
       } else {
+        console.log('[Audio HUD] No audioDataUri returned. Voice session complete (text-only).');
         setVoiceState('idle');
         soundFx.playConfirmSound();
       }
 
     } catch (err: any) {
-      console.error('[Audio HUD] Pipeline failure:', err);
+      console.error('[Audio HUD] Pipeline failure:', err?.message);
+      console.error('[Audio HUD] Full error object:', err);
       setVoiceState('error');
       setErrorMessage(err?.message || 'Voice interaction failed.');
       soundFx.playErrorAlert();

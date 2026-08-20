@@ -51,7 +51,7 @@ vi.mock('electron', () => electronMock);
 // ──────────────────────────────────────────────────────────────────────────────
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const preloadPath = path.resolve(__dirname, '../../electron/preload.js');
+const preloadPath = path.resolve(__dirname, '../../electron/preload.cjs');
 const preloadCode = fs.readFileSync(preloadPath, 'utf8');
 
 const req = createRequire(import.meta.url);
